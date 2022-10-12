@@ -1,24 +1,52 @@
-console.log("노드js 시작!")
+//기본설정
+const express = require("express")
+const req = require('express/lib/request')
+const res = require('express/lib/response')
+const app = express()
+/*
+//정적 파일 불러오기
+app.use(express.static(__dirname + "/public"));
 
-var http = require("http")
-var url = require("url");
+//라우터 정의
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+});
 
-http.createServer( (req, res) => {
-    var pathname = url.parse(req.url).pathname;
-    console.log("Request for " + pathname + " received.");
-    if(pathname ==="/start") {
-        res.setHeader("Content-Type', 'text/html");
-        res.write("Hello");
-        res.end();
-    }
-    else if(pathname === "/finish"){
-        res.setHeader('Content-Type', 'text/html');
-        res.write("Goodbye");
-        res.end();
-    }else{
-        res.writeHead(404, {"Content-Type": "text/plain"});
-        res.end("404 Not Found");
+//서버 실행
+app.listen(PORT, () => {
+    console.log('Listen : ${PORT}');
+});*/
+
+app.set('views', __dirname + '/views')
+app.set('view engine', 'ejs')
+
+app.get('/data', (req, res) => {
+    var context = [
+        {'a' : 'Hello', 'b':'World'},
+        {'a' : 'javascript', 'b':'is...'},
+        {'a' : 'web', 'b':'is...'}
+    ]
+    res.render('data.ejs', {'data' : context }, (err, html) =>{
+        if(err){
+            console.log(err)
         }
+        res.end(html)
+    })
+})
+
+app.get('/contact', (req,res) => {
+    res.render('contact.ejs',
+    {
+        'name':'juliahn', 'mail':'teacher006@bssm.hs.kr'
+    },
+    (err, html)=>{
+        if(err){
+            console.log(err)
         }
-    ).listen(3000);
-    console.log("Server has started");
+        res.end(html)
+    })
+})
+
+app.listen( 3000, () => {
+    console.log('listening on 3000')
+})
